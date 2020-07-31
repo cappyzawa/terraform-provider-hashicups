@@ -180,6 +180,14 @@ func resourceOrderUpdate(ctx context.Context, d *schema.ResourceData, m interfac
 }
 
 func resourceOrderDelete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	c := m.(*hc.Client)
+
 	var diags diag.Diagnostics
+
+	orderID := d.Id()
+	if err := c.DeleteOrder(orderID); err != nil {
+		return diag.FromErr(err)
+	}
+	d.SetId("")
 	return diags
 }
